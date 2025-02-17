@@ -4,6 +4,7 @@ export const colors = {
     branco_gelo: '#F8F9FA',
     roxo: '#B39CD0',
     verde: '#C3E6CB',
+    statusbar:'#F4AEB9',
   };
   export default colors;
   

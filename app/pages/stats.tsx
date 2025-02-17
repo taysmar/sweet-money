@@ -40,7 +40,7 @@ const Stats = () => {
         const storedSaidas = await AsyncStorage.getItem('saidas');
         if (storedSaidas) {
           const parsedSaidas = JSON.parse(storedSaidas);
-          console.log("📊 Saídas carregadas:", parsedSaidas);
+
           setSaidas(parsedSaidas);
 
           if (Array.isArray(parsedSaidas) && parsedSaidas.length > 0) {
