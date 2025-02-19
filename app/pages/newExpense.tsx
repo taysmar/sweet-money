@@ -293,11 +293,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.verde,
     marginVertical: 25,
     borderRadius: 10,
+    width: 155,
+    marginHorizontal: 90,
+    shadowOffset: { width: 10, height: 10 },
+    shadowColor: 'black',
+    shadowOpacity: 2,
+    elevation: 6,
   },
   buttonAddSaida: {
     backgroundColor: colors.rosa_salmao,
     marginVertical: 25,
     borderRadius: 10,
+    width: 155,
+    marginHorizontal: 90,
+    shadowOffset: { width: 10, height: 10 },
+    shadowColor: 'black',
+    shadowOpacity: 2,
+    elevation: 6,
+    
     
   },
   entradaItem: {
