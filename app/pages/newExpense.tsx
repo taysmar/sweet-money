@@ -6,7 +6,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { format } from 'date-fns';
 import colors from "./colors";
 import { createStackNavigator } from "@react-navigation/stack";
-import { LinearGradient } from "react-native-svg";
 
 const Stack = createStackNavigator()
 
@@ -26,7 +25,7 @@ const NewExpense = () => {
   const [modalSaida, setModalSaida] = useState(false);
 
   const [categoriasEntrada, setCategoriasEntrada] = useState<string[]>(["Salário", "Freelance", "Outros"]);
-  const [categoriasSaida, setCategoriasSaida] = useState<string[]>(["Aluguel", "Alimentação", "Transporte"]);
+  const [categoriasSaida, setCategoriasSaida] = useState<string[]>(["Aluguel", "Alimentação", "Transporte", "casa"]);
 
   type EntradaProps = {
     id: string;

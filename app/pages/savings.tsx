@@ -22,7 +22,6 @@ const Savings = () => {
     const saveGoalsToStorage = async (goals: Goal[]) => {
         try {
             await AsyncStorage.setItem('goals', JSON.stringify(goals));
-            console.log('Metas salvas:', goals); // Verificar no console
         } catch (error) {
             console.error('Erro ao salvar metas:', error);
         }
@@ -47,7 +46,6 @@ const Savings = () => {
             const storedGoals = await AsyncStorage.getItem('goals');
             if (storedGoals) {
                 setGoals(JSON.parse(storedGoals));
-                console.log('Metas carregadas:', JSON.parse(storedGoals)); // 🔹 Verificar no console
             }
         } catch (error) {
             console.error('Erro ao carregar metas:', error);
