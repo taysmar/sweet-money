@@ -5,6 +5,7 @@ export const colors = {
     roxo: '#B39CD0',
     verde: '#C3E6CB',
     statusbar:'#F4AEB9',
+    preto_suave: 'rgba(0,0,0,0.53)'
   };
   export default colors;
   

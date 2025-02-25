@@ -13,6 +13,7 @@ type RootStackParamList = {
   Stats: undefined;
   NewExpense: undefined;
   Settings: undefined;
+  Login: undefined;
 };
 
 export default function Home() {
@@ -42,6 +43,9 @@ export default function Home() {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
           <MaterialIcons name="settings" size={30} style={styles.iconButton} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <MaterialIcons name="login" size={30} style={styles.iconButton} />
         </TouchableOpacity>
       </View>
       <SafeAreaView style={styles.historyContainer}>
