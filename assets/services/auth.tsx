@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import { supabase } from "../config/supabase";
 
 // Criar uma conta nova
@@ -21,6 +22,7 @@ export const signIn = async (email: string, password: string) => {
 
 // Fazer logout
 export const signOut = async () => {
+  Alert.alert("Certeza que já vai embora? :c")
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 };

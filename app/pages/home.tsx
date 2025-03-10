@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import { Appbar, Button } from 'react-native-paper'
-import React from "react";
-import { View, StyleSheet, FlatList, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, FlatList, Text, TouchableOpacity, SafeAreaView, ScrollView, RefreshControl } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons'
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import colors from "./colors";
 import History from "./history";
+import { supabase } from "@/assets/config/supabase";
 
 type RootStackParamList = {
   Home: undefined;
@@ -13,24 +14,75 @@ type RootStackParamList = {
   Stats: undefined;
   NewExpense: undefined;
   Settings: undefined;
-  Login: undefined;
 };
 
 export default function Home() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [saldo, setSaldo] = useState(0);
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 200);
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (data?.user?.id) {
+        setUserId(data.user.id);
+      } else {
+        console.error("Erro ao obter usuário:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const loadTransactions = async () => {
+      if (!userId) return;
+      const { data, error } = await supabase
+      .from("transactions")
+      .select("amount, type")
+      .eq("client_id", userId)
+
+  if (error) {
+      console.error("Erro ao buscar transações:", error);
+      return;
+  }
+
+  const total = data.reduce((acc, transaction) =>{
+    return transaction.type==="entrada"
+    ? acc + transaction.amount
+    : acc - transaction.amount;
+  }, 0)
+setSaldo(total)
+  };
+  
+    useEffect(() => {
+      loadTransactions();
+    }, );
 
   return (
     <View style={styles.container}>
+      <ScrollView refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> } >
+      <View style={styles.headerContainer}>
+
       <Appbar.Header style={styles.header}>
         <Appbar.Content title="sweet money" titleStyle={styles.headerTitle} />
-        <Appbar.Action icon="menu" iconColor={colors.branco_gelo} onPress={() => { }} />
       </Appbar.Header>
 
       <View style={styles.balanceContainer}>
         <Text style={styles.balanceText}>Saldo atual</Text>
-        <Text style={styles.balanceAmount}>R$ 300,00</Text>
+        <Text  style={[
+          styles.itemTextValue,
+          saldo > 0 ? styles.balanceAmount : styles.balanceAmountnegative, 
+        ]}
+        >{saldo}</Text>
       </View>
+        </View>
       <View style={styles.iconContainer}>
         <TouchableOpacity onPress={() => navigation.navigate("NewExpense")}>
           <MaterialIcons name="attach-money" size={30} style={styles.iconButton} />
@@ -44,17 +96,12 @@ export default function Home() {
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
           <MaterialIcons name="settings" size={30} style={styles.iconButton} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <MaterialIcons name="login" size={30} style={styles.iconButton} />
-        </TouchableOpacity>
       </View>
-      <SafeAreaView style={styles.historyContainer}>
+              </ScrollView>
+
+
+      <View style={styles.historyContainer}>
         <History />
-      </SafeAreaView>
-      <View style={styles.buttonContainer}>
-        <Button style={styles.button} onPress={() => { }}>
-          Detalhes
-        </Button>
       </View>
     </View>
   )
@@ -66,16 +113,20 @@ const styles = StyleSheet.create({
     padding: 16,
 
   },
+  headerContainer:{
+    flex:1,
+    marginHorizontal:19,
+    marginTop:10
+  },
   header: {
     backgroundColor: colors.rosa_salmao,
     borderRadius: 21,
     marginVertical: 21,
     height: 30,
-    shadowOffset: { width: 10, height: 10 },
+    shadowOffset: { width: 6, height: 10 },
     shadowColor: 'black',
     shadowOpacity: 2,
-    elevation: 6,
-
+    elevation: 10,
   },
   headerTitle: {
     textAlign: 'center',
@@ -93,8 +144,6 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     shadowOpacity: 2,
     elevation: 6,
-
-
   },
   balanceText: {
     textAlign: 'right',
@@ -107,14 +156,21 @@ const styles = StyleSheet.create({
     textAlign: 'right',
 
   },
+  balanceAmountnegative:{
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: "red",
+    textAlign: 'right',
+  },
   iconContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 11,
+    marginHorizontal:6,
     alignItems: 'stretch',
   },
   historyContainer: {
-    flex: 1,
+    flex: 1000,
     backgroundColor: colors.branco_gelo,
     marginHorizontal: 19,
     marginVertical: 10,
@@ -124,22 +180,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 2,
     elevation: 6,
   },
-  buttonContainer: {
-    alignItems: "center",
-    marginBottom: 15,
-
-  },
-  button: {
-    width: 155,
-    height: 41,
-    backgroundColor: colors.verde,
-    borderRadius: 10,
-    shadowOffset: { width: 10, height: 10 },
-    shadowColor: 'black',
-    shadowOpacity: 2,
-    elevation: 6,
-
-  },
+ 
   iconButton: {
     color: colors.branco_gelo,
     backgroundColor: colors.verde,
@@ -152,6 +193,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 2,
     elevation: 6,
     textAlign: 'center',
+  },
+  itemTextValue:{
+
   }
 
 })

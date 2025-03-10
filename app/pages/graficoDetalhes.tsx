@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
+import AppText from "./fontApp";
 
 const DonutChartMeta = ({ reservado, meta }: { reservado: number; meta: number }) => {
     // Calcula a porcentagem de progresso
@@ -19,7 +20,7 @@ const DonutChartMeta = ({ reservado, meta }: { reservado: number; meta: number }
                 radius={70}
                 data={pieData}
                 centerLabelComponent={() => (
-                    <Text style={styles.percentageText}>{porcentagem}%</Text>
+                    <AppText style={styles.percentageAppText}>{porcentagem}%</AppText>
                 )}
             />
         </View>
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginVertical: 20,
     },
-    percentageText: {
+    percentageAppText: {
         fontSize: 24,
         fontWeight: "bold",
         color: "#333",

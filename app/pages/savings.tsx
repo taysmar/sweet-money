@@ -72,7 +72,6 @@ const Savings = () => {
         }
     };
 
-
     useEffect(() => {
         fetchMetas();
     }, []);
@@ -109,13 +108,11 @@ const Savings = () => {
         }
     };
 
-
     return (
         <View style={styles.container}>
             <Modal animationType="slide" transparent={true} visible={modalState} onRequestClose={() => setModalState(false)} >
                 <View style={styles.cadastroMetaContainer}>
                     <KeyboardAwareScrollView>
-
                         <TouchableOpacity
                             style={styles.closeButton}
                             onPress={() => setModalState(false)}>
@@ -206,7 +203,7 @@ const Savings = () => {
                         </View>
                         <View style={styles.valorContainer}>
                             <Text style={styles.label}>Valor reservado</Text>
-                            <Text style={styles.valor}>R$ {totalReservado}{metaSelecionada.saved_amount}</Text>
+                            <Text style={styles.valor}>R$ {metaSelecionada.saved_amount}</Text>
                         </View>
 
                         <View style={styles.valorContainer}>
@@ -226,7 +223,7 @@ const Savings = () => {
                 <View style={styles.metasContainer}>
                     <View style={styles.totalContainer}>
                         <Text style={styles.totalTitle}>Total reservado</Text>
-                        <Text style={styles.totalValue}>R$ </Text>
+                        <Text style={styles.totalValue}>R$ {totalReservado}</Text>
                     </View>
                     <Button
                         style={styles.addMetaButton}
@@ -235,6 +232,7 @@ const Savings = () => {
 
                     <FlatList
                         data={metas}
+                        horizontal={false}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
                             <TouchableOpacity onPress={() => abrirDetalhesMeta(item)}>
@@ -321,7 +319,6 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     itemContainer: {
-        flex: 2,
         backgroundColor: colors.branco_gelo,
         marginVertical: 16,
         borderRadius: 10,
@@ -442,7 +439,7 @@ const styles = StyleSheet.create({
     },
     itemTitle: {
         fontSize: 16,
-        width: '50%',
+        width: '70%',
         textAlign: 'right'
     },
     itemValue: {
